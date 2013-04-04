@@ -1,11 +1,15 @@
-define(['jquery', 'knockout-unobtrusive'],
+define(['jquery', 'knockout-unobtrusive', 'googleDriveService'],
 
-function($, ko) {
+function($, ko, googleDriveService) {
 
     function SigninViewModel() {
         var self = this;
 
-        
+        if(googleDriveService.isReady() && googleDriveService.isAuthorized()) {
+        	console.log('Ingelogd en akkoord, ga verder naar volgende pagina');
+        } else {
+        	console.log('Niet ingelogd, gebruik inlog knop');
+        }
         
         
     }

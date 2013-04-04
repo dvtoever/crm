@@ -22,7 +22,7 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository'],
                     htmlElement.find('.personen-tabel .persoon').dataBind( { css: {active: 'isActive()'}});
                     htmlElement.find('.personen-tabel li a').dataBind( { text: 'getNaam()', attr: { 'href' : 'getLink()' } });
 
-                    self.viewModel = new HomeViewModel(args.persoonId);
+                    self.viewModel = new HomeViewModel(args !== undefined ? args.persoonId : {});
                     ko.applyBindings(self.viewModel, htmlElement[0]);
                 });
             };

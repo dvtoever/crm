@@ -1,4 +1,4 @@
-define(['jquery', 'sammy'], function ($, sammy) {
+define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriveService) {
     'use strict';
 
     return $.sammy('.view', function () {
@@ -7,8 +7,8 @@ define(['jquery', 'sammy'], function ($, sammy) {
 
         // #!/
         this.get('/#!/', function(context) {
-            console.log('Sammy: openen start pagina');
-            openView(context, 'Home');
+            console.log('Sammy: openen signin pagina');
+            openView(context, 'Signin');
         });
         
         this.get('/#!/persoon/:persoonId', function(context) {
@@ -23,7 +23,7 @@ define(['jquery', 'sammy'], function ($, sammy) {
 
         // before handling each request, set the current hash on the navigation-service
         this.before(function(context) {
-            //navigationService.setHash(location.hash);
+
         });
 
         // catch all for unknown routes ('404')

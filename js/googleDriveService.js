@@ -7,7 +7,14 @@ define(['jquery'], function ($) {
     
     var gapi;
     var client;
+    var ready = false;
     
+    var config = {
+        'client_id': '576698137512.apps.googleusercontent.com',
+        'scope': 'https://www.googleapis.com/auth/drive',
+        'immediate' : false
+    };
+
     /**
      * Als deze methode wordt aangeroepen is window.gapi beschikbaar 
      */
@@ -17,10 +24,23 @@ define(['jquery'], function ($) {
         gapi = window.gapi;
         client = gapi.client;
         
-        handleClientLoad(function() {
-            console.log('Google drive client geladen');
-            onReady();
+        ready = true;
+        // handleClientLoad(function() {
+        //     console.log('Google drive client geladen');
+        //     onReady();
+        // }, false);
+        
+        gapi.auth.checkSessionState({ client_id: config.client_id, session_state: null}, function(loggedIn) {
+           console.log("Is used still signed in? " + loggedIn); 
         });
+    };
+    
+    GoogleDriveService.prototype.isReady = function() {
+        return ready;
+    };
+    
+    GoogleDriveService.prototype.isAuthorized = function() {
+        return gapi.auth.getToken() !== null;
     };
     
     /**
@@ -44,16 +64,20 @@ define(['jquery'], function ($) {
             }
         });
     };
+            // googleDriveService.search('kavel', function(items) {
+            //     for(var i = 0; i < items.length; i++ ) {
+            //         var item = items[i];
+            //         var titel = item.title;
+            //         
+            //         console.log('Document: ' + titel );
+            //     }
+            // });
 
-    function handleClientLoad(onReady) {
-        var config = {
-            'client_id': '576698137512.apps.googleusercontent.com',
-            'scope': 'https://www.googleapis.com/auth/drive',
-            'immediate' : true
-        };
+    function handleClientLoad(onReady, immediate) {
+
         
-        //var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
-        //client.setApiKey(apiKey);
+        var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
+        client.setApiKey(apiKey);
         
         // popup die vraagt om toestemming naar google drive
         gapi.auth.authorize(config, function() {

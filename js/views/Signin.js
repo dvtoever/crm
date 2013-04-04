@@ -21,7 +21,7 @@ function($, ko) {
 
             $.get('/templates/signin.html', function(template) {
                 htmlElement.html(template);
-
+                htmlElement.find('.loginButton').dataBind({ click: 'login'}); 
 
                 self.viewModel = new SigninViewModel();
                 ko.applyBindings(self.viewModel, htmlElement[0]);

@@ -36,7 +36,7 @@ define(['jquery'], function ($) {
     };
     
     GoogleDriveService.prototype.isReady = function() {
-        return ready;
+        return gapi !== undefined;
     };
     
     GoogleDriveService.prototype.isAuthorized = function() {
@@ -73,11 +73,13 @@ define(['jquery'], function ($) {
             //     }
             // });
 
-    function handleClientLoad(onReady, immediate) {
+    GoogleDriveService.prototype.handleClientLoad = function(onReady, immediate) {
 
         
         var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
         client.setApiKey(apiKey);
+        
+        config.immediate = immediate;
         
         // popup die vraagt om toestemming naar google drive
         gapi.auth.authorize(config, function() {

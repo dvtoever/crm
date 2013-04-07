@@ -4,11 +4,20 @@ function($, ko, googleDriveService) {
 
     function SigninViewModel() {
         var self = this;
-
-        if(googleDriveService.isReady() && googleDriveService.isAuthorized()) {
-        	console.log('Ingelogd en akkoord, ga verder naar volgende pagina');
-        } else {
-        	console.log('Niet ingelogd, gebruik inlog knop');
+        this.foutmelding = ko.observable();
+        
+        this.login = function() {
+        	googleDriveService.handleClientLoad(function(args) {
+        		console.log('Klaar met authorize!' + args);
+        		if(googleDriveService.isAuthorized()) {
+        			console.log('Inloggen akkoord!');
+                	window.location = '/#!/home';
+        		} else {
+        			console.log('Inloggen mislukt');
+        			this.foutmelding("Fout tijdens inloggen bij Google");
+        		}
+        		
+        	}, false)
         }
         
         

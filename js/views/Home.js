@@ -4,7 +4,15 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository'],
         function HomeViewModel(persoonId) {
             var self = this;
             
+            this.personen = ko.observableArray();
             
+            this.refresh = function() {
+            	persoonRepository.findAll(function(results) {
+            		$.each(results, function(index, persoon) {
+            			self.personen.push(persoon);
+            		});
+            	});
+            }
         }
         
         return function HomeView(htmlElement, args) {

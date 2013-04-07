@@ -8,7 +8,18 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
         // #!/
         this.get('/#!/', function(context) {
             console.log('Sammy: openen signin pagina');
-            openView(context, 'Signin');
+            
+            if(googleDriveService.isReady() && googleDriveService.isAuthorized()) {
+            	console.log('Ingelogd en akkoord, ga verder naar volgende pagina');
+            	openView(context, 'Home');
+            } else {
+            	console.log('Niet ingelogd, gebruik inlog knop');
+                openView(context, 'Signin');
+            }
+        });
+        
+        this.get('/#!/home', function(context) {
+            openView(context, 'Home', {});
         });
         
         this.get('/#!/persoon/:persoonId', function(context) {
@@ -48,11 +59,11 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
         */
         function openView(context, viewName, args) {
             // if there is a current view, it is the same as requested & it supports refresh: call refresh
-            if(context.app.view && context.app.view.name === viewName && context.app.view.refresh) {
-                context.app.view.refresh(args);
-            }
+            //if(context.app.view && context.app.view.name === viewName && context.app.view.refresh) {
+            //    context.app.view.refresh(args);
+            //}
                 // (re)open the view if it exists
-            else {
+            //else {
                 require(['views/' + viewName], function (View) {
                     context.app.view = new View(context.$element(), args);
                     // if the requested view supports init: call init
@@ -62,7 +73,7 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
 
                     $('html, body').scrollTop(0);
                 });
-            }
+            //}
             /* // in all other cases, show an error
             else {
                 context.error();

@@ -1,6 +1,6 @@
 require.config({
     baseUrl: '/js',
-    urlArgs: "bust=" + (new Date()).getTime(),
+    //urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         'async': '/js/libs/require-async',
         'driveApi': '/js/libs/driveApi',

@@ -1,6 +1,6 @@
 require.config({
     baseUrl: '/js',
-    //urlArgs: "bust=" + (new Date()).getTime(),
+//    urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         'async': '/js/libs/require-async',
         'driveApi': '/js/libs/driveApi',
@@ -8,9 +8,12 @@ require.config({
         'knockout': '/js/libs/knockout-2.1.0',
         'knockout-unobtrusive': '/js/libs/jquery.unobtrusive-knockout',
 
+        'stopBinding' : '/js/customBinding/stopBinding',
         'parse': '/js/libs/parse-1.1.8.min',
 
         'googleDriveService': '/js/googleDriveService',
+        'PersonenControl' : '/js/controls/PersonenList',
+        
         'parseService': '/js/parseService',
         'persoonRepository': '/js/repository/persoonRepository',
 
@@ -21,7 +24,7 @@ require.config({
  * Callback functie aangeroepen wanneer google API klaar is met laden
  */
 window.googleLoaded = function() {
-    require(['jquery', 'googleDriveService', 'persoonRepository'], function($, googleDriveService, repo) {
+    require(['jquery', 'googleDriveService'], function($, googleDriveService) {
         'use strict';
 
         // google api is geladen
@@ -38,9 +41,9 @@ require(['https://apis.google.com/js/client:plus.js?onload=googleLoaded']);
  * 
  * Zorgt dat de home view wordt geopend
  */
-require(['jquery', 'app', 'controls/personenList'],
+require(['jquery', 'app'],
 
-function($, app, PersonenListControl) {
+function($, app) {
 
     'use strict';
 
@@ -48,8 +51,6 @@ function($, app, PersonenListControl) {
     $(function() {
         console.log('Opening application...');
         window.app = app;
-
-        //app.personenControl = new PersonenListControl($('.personen-tabel'), {}); // geen personen geselecteerd
 
         app.run('#!/');
 

@@ -55,21 +55,25 @@ define([ 'jquery', 'knockout-unobtrusive', 'persoonRepository' ], function($, ko
 	}
 
 	return function PersonenListControl(htmlElement, options) {
-
+		var self = this;
+		
+		this.viewModel = null;
+		
 		// initialize the data-binding
         htmlElement.find('.persoon').dataBind( { css: {active: 'isActive'}});
         htmlElement.find('li a').dataBind( { text: 'getNaam()', attr: { 'href' : 'getLink()' } });
 
 		// initialize the view-model
-		var viewModel = new PersonenListViewModel(options.persoonId);
+		this.viewModel = new PersonenListViewModel(options.persoonId);
 
 		// apply the data-binding
-		ko.applyBindings(viewModel, htmlElement[0]);
-        
-        viewModel.update();
+	     // apply the data-bindings
+        $.each(htmlElement, function (index, element) {
+            ko.applyBindings(self.viewModel, element);
+        });
         
         this.update = function(persoonId) {
-            viewModel.update(persoonId);
+            self.viewModel.update(persoonId);
         }
 	};
 

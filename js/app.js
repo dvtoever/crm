@@ -34,16 +34,10 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
 
         // before handling each request, set the current hash on the navigation-service
         this.before(function(context) {
-
         });
 
         // catch all for unknown routes ('404')
         this.notFound = function(verb, path){
-            this.title.clear();
-            this.menu.activate(null);
-            this.breadcrumb.clear();
-            this.mijnovm.reset();
-
             console.log('route: not-found (verb: ' + verb + ', path: ' + path + ')');
 
             this.view = null;

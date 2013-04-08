@@ -23,12 +23,7 @@ define(['jquery'], function ($) {
         
         gapi = window.gapi;
         client = gapi.client;
-        
         ready = true;
-        // handleClientLoad(function() {
-        //     console.log('Google drive client geladen');
-        //     onReady();
-        // }, false);
         
         gapi.auth.checkSessionState({ client_id: config.client_id, session_state: null}, function(loggedIn) {
            console.log("Is used still signed in? " + loggedIn); 
@@ -64,6 +59,29 @@ define(['jquery'], function ($) {
             }
         });
     };
+    
+    GoogleDriveService.prototype.createFolder = function(folderName, onReady) {
+    	console.log('Creating folder on Google drive: ' + folderName);
+    	
+    	var request = client.request( {
+    		'path' : '/drive/v2/files/',
+    		'method' : 'POST',
+    		'headers': {
+    	           'Content-Type': 'application/json',
+    	           'Authorization': 'Bearer ' + gapi.auth.getToken().access_token,             
+    	       },
+    	       'body':{
+    	           "title" : folderName,
+    	           "mimeType" : "application/vnd.google-apps.folder",
+    	       }
+    	});
+    	
+    	request.execute(function(response) {
+    		console.log('Folder creation response: ' + response);
+    		onReady(response);
+    	});
+    };
+    
             // googleDriveService.search('kavel', function(items) {
             //     for(var i = 0; i < items.length; i++ ) {
             //         var item = items[i];
@@ -74,8 +92,6 @@ define(['jquery'], function ($) {
             // });
 
     GoogleDriveService.prototype.handleClientLoad = function(onReady, immediate) {
-
-        
         var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
         client.setApiKey(apiKey);
         

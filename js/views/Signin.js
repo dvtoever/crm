@@ -11,6 +11,7 @@ function($, ko, googleDriveService) {
         		console.log('Klaar met authorize!' + args);
         		if(googleDriveService.isAuthorized()) {
         			console.log('Inloggen akkoord!');
+
                 	window.location = '/#!/home';
         		} else {
         			console.log('Inloggen mislukt');
@@ -19,8 +20,6 @@ function($, ko, googleDriveService) {
         		
         	}, false)
         }
-        
-        
     }
 
     return function SigninView(htmlElement, args) {

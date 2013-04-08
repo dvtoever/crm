@@ -1,18 +1,24 @@
-define( ['jquery', 'knockout-unobtrusive', 'persoonRepository'],
-    function($, ko, persoonRepository) {
+define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl', 'googleDriveService','stopBinding'],
+    function($, ko, persoonRepository, PersonenControl, googleDriveService) {
         
-        function HomeViewModel(persoonId) {
+        function HomeViewModel(persoonId, updatePersonenCB) {
             var self = this;
-            
-            this.personen = ko.observableArray();
-            
+
             this.refresh = function() {
-            	persoonRepository.findAll(function(results) {
-            		$.each(results, function(index, persoon) {
-            			self.personen.push(persoon);
-            		});
-            	});
+            	if(updatePersonenCB) {
+            		updatePersonenCB();
+            	}
+            	
+            	
+            	googleDriveService.handleClientLoad(function(args) {
+            		// Folder maken voor opslag documenten
+            		googleDriveService.createFolder('crm-documenten', function() {
+                		console.log('cb klaar');
+                	});
+            	}, true);
             }
+            
+            self.refresh();
         }
         
         return function HomeView(htmlElement, args) {
@@ -25,21 +31,20 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository'],
                 console.log('Home view init!');
                 
                 $.get( '/templates/home.html', function(template) {
-                    htmlElement.html(template);
+                	htmlElement.html(template);
 
-                    htmlElement.find('.personen-tabel .persoon').dataBind( { css: {active: 'isActive()'}});
-                    htmlElement.find('.personen-tabel li a').dataBind( { text: 'getNaam()', attr: { 'href' : 'getLink()' } });
+                	htmlElement.find('.personenWrapper').dataBind( { stopBinding : 'true' });
+                	
+                	window.app.personenControl = new PersonenControl($('.personen-tabel'), {}); // geen personen geselecteerd
 
-                    self.viewModel = new HomeViewModel(args !== undefined ? args.persoonId : {});
+                    self.viewModel = new HomeViewModel(args !== undefined ? args.persoonId : {}, window.app.personenControl.update );
                     ko.applyBindings(self.viewModel, htmlElement[0]);
                 });
             };
             
             this.refresh = function(args) {
+            	self.viewModel.refresh();
             }
-            
         };
    
-   
-   
-});
+	});

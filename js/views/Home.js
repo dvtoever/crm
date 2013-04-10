@@ -3,18 +3,44 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl
         
         function HomeViewModel(persoonId, updatePersonenCB) {
             var self = this;
-
+            
+        	this.folderName = 'crm-documenten';
+        	this.applicationData = {
+        			parseToken: 'myToken',
+        			parseUser: 'myUser'
+        	}
+        	
             this.refresh = function() {
-            	if(updatePersonenCB) {
-            		updatePersonenCB();
-            	}
-            	
-            	
-            	googleDriveService.handleClientLoad(function(args) {
-            		// Folder maken voor opslag documenten
-            		googleDriveService.createFolder('crm-documenten', function() {
-                		console.log('cb klaar');
-                	});
+	        	if(updatePersonenCB) {
+	        		updatePersonenCB();
+	        	}
+
+
+	        	
+	        	googleDriveService.handleClientLoad(function(args) {
+            		
+	        		// Controleren of documenten folder bestaat en evt aanmaken
+	        		googleDriveService.folderExists(self.folderName, function(folderExistsCB) {
+            			
+            			// if not exist, create folder
+            			if(!folderExistsCB.items || folderExistsCB.items.length === 0) {
+            				googleDriveService.createFolder(self.folderName, function(result) {
+            					console.log('Folder ' + self.folderName + ' niet gevonden. Folder is aangemaakt');
+            				});
+            			}
+            		});
+	        		
+	        		// Applicatie data opslaan
+	        		googleDriveService.storeApplicationData({fileName: 'crm-settings.json', some: 'jsonthingy'}, function(result) {
+	        			console.log('Callback van store application data');
+	        			console.log(result);
+	        		});
+	        		
+	        		googleDriveService.listApplicationData(function(result) {
+	        			console.log('Callback van list app data');
+	        			console.log(result);
+	        		});
+	        		
             	}, true);
             }
             

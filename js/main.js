@@ -2,20 +2,21 @@ require.config({
     baseUrl: '/js',
 //    urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
-        'async': '/js/libs/require-async',
-        'driveApi': '/js/libs/driveApi',
-        'sammy': '/js/libs/sammy-latest.min',
-        'knockout': '/js/libs/knockout-2.1.0',
+        'async': 				'/js/libs/require-async',
+        'driveApi': 			'/js/libs/driveApi',
+        'sammy': 				'/js/libs/sammy-latest.min',
+        'knockout': 			'/js/libs/knockout-2.1.0',
         'knockout-unobtrusive': '/js/libs/jquery.unobtrusive-knockout',
 
-        'stopBinding' : '/js/customBinding/stopBinding',
-        'parse': '/js/libs/parse-1.1.8.min',
+        'stopBinding' : 		'/js/customBinding/stopBinding',
+        'parse': 				'/js/libs/parse-1.1.8.min',
 
-        'googleDriveService': '/js/googleDriveService',
-        'PersonenControl' : '/js/controls/PersonenList',
+        'googleDriveService':	'/js/googleDriveService',
+        'crmService': 			'/js/crmService',
+        'PersonenControl' :		'/js/controls/PersonenList',
         
-        'parseService': '/js/parseService',
-        'persoonRepository': '/js/repository/persoonRepository',
+        'parseService': 		'/js/parseService',
+        'persoonRepository': 	'/js/repository/persoonRepository',
 
     }
 });
@@ -26,9 +27,6 @@ require.config({
 window.googleLoaded = function() {
     require(['jquery', 'googleDriveService'], function($, googleDriveService) {
         'use strict';
-
-        // google api is geladen
-        googleDriveService.init();
 
     }); // end require
 };

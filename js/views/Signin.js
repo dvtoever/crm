@@ -7,7 +7,7 @@ function($, ko, googleDriveService) {
         this.foutmelding = ko.observable();
         
         this.login = function() {
-        	googleDriveService.handleClientLoad(function(args) {
+        	googleDriveService.waitUntilReady(function(args) {
         		console.log('Klaar met authorize!' + args);
         		if(googleDriveService.isAuthorized()) {
         			console.log('Inloggen akkoord!');

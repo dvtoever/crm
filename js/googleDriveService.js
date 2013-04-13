@@ -6,7 +6,6 @@ define(['jquery'], function ($) {
     GoogleDriveService.prototype = new GoogleDriveService();
     
     var SETTINGS_URL = 'settings_url';
-    var SETTINGS_NAME = 'crmsettings.json';
     
     var gapi;
     var client;
@@ -14,23 +13,52 @@ define(['jquery'], function ($) {
     
     var config = {
         'client_id': '576698137512.apps.googleusercontent.com',
-        'scope': ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/drive.appdata'],
+        'scope': ['https://www.googleapis.com/auth/drive', 
+                  'https://www.googleapis.com/auth/drive.appdata',
+                  'https://www.googleapis.com/auth/userinfo.email'],
         'immediate' : false
     };
 
     /**
 	 * Als deze methode wordt aangeroepen is window.gapi beschikbaar
 	 */
-    GoogleDriveService.prototype.init = function(onReady) {
+    GoogleDriveService.prototype.init = function(onReady, immediate) {
         console.log('Initializing Google drive API');
         
         gapi = window.gapi;
         client = gapi.client;
-        ready = true;
+        if(immediate) config.immediate = true;
         
-        gapi.auth.checkSessionState({ client_id: config.client_id, session_state: null}, function(loggedIn) {
-           console.log("Is used still signed in? " + loggedIn); 
-        });
+		// popup die vraagt om toestemming naar google drive
+		gapi.auth.authorize(config, function() {
+			// als authorizatie is gedaan, drive client laden
+			client.load('drive', 'v2', function() {
+				ready = true;
+				if(onReady) onReady();
+			});
+		});
+    };
+    
+
+    GoogleDriveService.prototype.waitUntilReady = function(onReady, immediate) {
+    	if(!ready) {
+    		this.init(function() {
+    			var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
+        		client.setApiKey(apiKey);
+        		if(onReady) onReady();
+    		}, immediate);
+    	} else {
+    		if(onReady) onReady();
+    	}
+    };
+    
+    GoogleDriveService.prototype.getEmail = function(getEmailCB) {
+    	this.getByUrl('https://www.googleapis.com/userinfo/email?alt=json', function(resultStr) {
+    		var result = JSON.parse(resultStr);
+    		if(result && result.data) {
+    			getEmailCB(result.data.email)
+    		}
+    	})
     };
     
     GoogleDriveService.prototype.isReady = function() {
@@ -128,14 +156,14 @@ define(['jquery'], function ($) {
     	}
     };
     
-    GoogleDriveService.prototype.storeApplicationData = function(fileData, storeApplicationDataCB) {
+    GoogleDriveService.prototype.storeApplicationData = function(fileName, fileData, storeApplicationDataCB) {
 		var boundary = '-------314159265358979323846';
 		var delimiter = "\r\n--" + boundary + "\r\n";
 		var close_delim = "\r\n--" + boundary + "--";
 		var contentType = 'application/json';
 
 		var metadata = {
-		  'title': 'crmsettings.json',
+		  'title': fileName,
 		  'mimeType': contentType,
 		  'parents': [{'id': 'appdata'}]
 		};
@@ -194,58 +222,61 @@ define(['jquery'], function ($) {
     	  
     	  retrievePageOfFiles(initialRequest, []);
     };
-
-    GoogleDriveService.prototype.handleClientLoad = function(onReady, immediate) {
-        var apiKey = 'AIzaSyBxIvaXncSc-XLua8Epgxr-gux_5o_-7VU';
-        client.setApiKey(apiKey);
-        
-        config.immediate = immediate;
-        
-        // popup die vraagt om toestemming naar google drive
-        gapi.auth.authorize(config, function() {
-            // als authorizatie is gedaan, drive client laden
-            client.load('drive', 'v2', onReady);
-        });
-    };
     
     /**
      * Opvragen van CRM settings.
      * 
      * @return json settings object, of null als er niks werd gevonden
      */
-    GoogleDriveService.prototype.getSettings = function(getSettingsCB) {
+    GoogleDriveService.prototype.getSettings = function(settingsName, getSettingsCB) {
     	// controleer of settings url in localstorage staat
     	var settingsUrl = window.localStorage.getItem(SETTINGS_URL);
+    	var gevonden = false;
     	
-    	if(settingsUrl === null) {
-    		var found = false;
-    		
-    		// probeer settings via een search te vinden
-    		this.listApplicationData(function(result) {
-    			if(result && result[0] !== undefined ) {
-	    			$.each(result, function(index, item) {
-	    				if(item.originalFilename === SETTINGS_NAME) {
-	    					settingsUrl = item.downloadUrl;
-	    					found = true;
-	    				}
-	    			});
-    			}
-    			
-    			if(found) {
-    				window.localStorage.setItem(SETTINGS_URL, settingsUrl);
+    	if(settingsUrl !== null ) {
+    		this.getByUrl(settingsUrl, function(result) {
+    			if(result) {
+    				// gevonden we kunnen stoppen
+    				getSettingsCB(result);
     			} else {
+    				// ondanks dat er een localstorage key was, niks gevonden
     				window.localStorage.removeItem(SETTINGS_URL);
-    				getSettingsCB(null);
-    				return;
+    				
+    				zoekSettings(this, settingsName, getSettingsCB);
     			}
     		});
-    	} 
-    	
-		this.getByUrl(settingsUrl, function(result) {
-			getSettingsCB(result);
-		});
+    	} else {
+    		zoekSettings(this, settingsName, getSettingsCB);
+    	}
     	
     };
+    
+    function zoekSettings(context, settingsName, getSettingsCB) {
+    	var downloadUrl = null;
+    	
+    	// zoek file via search api call
+		context.listApplicationData(function(result) {
+			if(result && result[0] !== undefined ) {
+				for(var i = 0; i < result.length; i++) {
+					if(result[i].originalFilename === settingsName) {
+						downloadUrl = result[i].downloadUrl
+						
+					}
+    			}
+			}
+			
+			if(downloadUrl !== null) {
+				// gevonden, nu opvragen en teruggeven
+				window.localStorage.setItem(SETTINGS_URL, downloadUrl);
+				context.getByUrl(downloadUrl, function(fileContent) {
+					getSettingsCB(fileContent);
+				});
+			} else {
+				// niks gevonden
+				getSettingsCB(null);
+			}
+		});
+    }
     
     return new GoogleDriveService();
 });

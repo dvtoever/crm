@@ -1,49 +1,19 @@
-define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl', 'googleDriveService','stopBinding'],
-    function($, ko, persoonRepository, PersonenControl, googleDriveService) {
+define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl', 'crmService','stopBinding'],
+    function($, ko, persoonRepository, PersonenControl, crmService) {
         
         function HomeViewModel(persoonId, updatePersonenCB) {
             var self = this;
             
-        	this.folderName = 'crm-documenten';
-        	this.applicationData = {
-        			parseToken: 'myToken',
-        			parseUser: 'myUser'
-        	}
-        	
+            /** Eenmalig initaliseren van de CRM applicatie */
+        	crmService.initApplication(function() {
+        		var settings = crmService.getSettings();
+        		console.log(settings);
+        	});
+            
             this.refresh = function() {
 	        	if(updatePersonenCB) {
 	        		updatePersonenCB();
 	        	}
-
-
-	        	
-	        	googleDriveService.handleClientLoad(function(args) {
-            		
-	        		// Controleren of documenten folder bestaat en evt aanmaken
-	        		googleDriveService.folderExists(self.folderName, function(folderExistsCB) {
-            			
-            			// if not exist, create folder
-            			if(!folderExistsCB.items || folderExistsCB.items.length === 0) {
-            				googleDriveService.createFolder(self.folderName, function(result) {
-            					console.log('Folder ' + self.folderName + ' niet gevonden. Folder is aangemaakt');
-            				});
-            			}
-            		});
-	        		
-	        		// Applicatie data opslaan
-	        		googleDriveService.storeApplicationData({fileName: 'crm-settings.json', some: 'jsonthingy'} );
-	        		
-	        		googleDriveService.getSettings(function(result) {
-	        			console.log('storeSettings, result: ');
-	        			result = JSON.parse(result)
-	        			console.log(result);
-	        			
-	        		});
-	        		
-	        		googleDriveService.listApplicationData(function(result) {
-	        			console.log(result);
-	        		});
-            	}, true);
             }
             
             self.refresh();

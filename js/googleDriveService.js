@@ -156,7 +156,7 @@ define(['jquery'], function ($) {
     	}
     };
     
-    GoogleDriveService.prototype.storeApplicationData = function(fileName, fileData, storeApplicationDataCB) {
+    GoogleDriveService.prototype.storeApplicationData = function(fileId, fileName, fileData, storeApplicationDataCB) {
 		var boundary = '-------314159265358979323846';
 		var delimiter = "\r\n--" + boundary + "\r\n";
 		var close_delim = "\r\n--" + boundary + "--";
@@ -181,9 +181,16 @@ define(['jquery'], function ($) {
 		    base64Data +
 		    close_delim;
 		
+		var filePath = '/upload/drive/v2/files';
+		var method = 'POST';
+		if(fileId) {
+			filePath += '/' + fileId;
+			method = 'PUT';
+		} 
+		
 		var request = client.request({
-		    'path': '/upload/drive/v2/files',
-		    'method': 'POST',
+		    'path': filePath,
+		    'method': method,
 		    'params': {'uploadType': 'multipart'},
 		    'headers': {
 		      'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'

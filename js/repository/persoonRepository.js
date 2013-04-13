@@ -46,7 +46,9 @@ define(['jquery', 'parse'], function ($) {
             console.log('Argument "persoon" is geen Persoon object. Gebruik "PersoonRepository.persoonInstance()"');
         } else {
             console.log('saving persoon...');
-            
+            var acl = new Parse.ACL(Parse.User.current());
+            acl.setPublicReadAccess(false);
+            persoon.setACL(acl);
             persoon.save(null, {
                 success: function(object) {
                     console.log('opslaan success');

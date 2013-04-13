@@ -5,6 +5,9 @@ define(['jquery'], function ($) {
     
     GoogleDriveService.prototype = new GoogleDriveService();
     
+    var SETTINGS_URL = 'settings_url';
+    var SETTINGS_NAME = 'crmsettings.json';
+    
     var gapi;
     var client;
     var ready = false;
@@ -103,14 +106,27 @@ define(['jquery'], function ($) {
     	});
     };
     
-            // googleDriveService.search('kavel', function(items) {
-            // for(var i = 0; i < items.length; i++ ) {
-            // var item = items[i];
-            // var titel = item.title;
-            //         
-            // console.log('Document: ' + titel );
-            // }
-            // });
+    GoogleDriveService.prototype.getByUrl = function(downloadUrl, getByUrlCB) {
+    	if(downloadUrl !== null) {
+	 	    var accessToken = gapi.auth.getToken().access_token;
+		    var xhr = new XMLHttpRequest();
+		    xhr.open('GET', downloadUrl);
+		    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+		    xhr.onload = function() {
+		    	if(xhr.status == 200) {
+		    		getByUrlCB(xhr.responseText);
+		    	} else {
+		    		getByUrlCB(null);
+		    	}
+		    };
+		    xhr.onerror = function() {
+		    	getByUrlCB(null);
+		    };
+		    xhr.send();
+    	} else {
+    		getByUrlCB(null);
+    	}
+    };
     
     GoogleDriveService.prototype.storeApplicationData = function(fileData, storeApplicationDataCB) {
 		var boundary = '-------314159265358979323846';
@@ -124,7 +140,7 @@ define(['jquery'], function ($) {
 		  'parents': [{'id': 'appdata'}]
 		};
 		
-		var base64Data = btoa(fileData);
+		var base64Data = btoa(JSON.stringify(fileData));
 		
 		var multipartRequestBody =
 		    delimiter +
@@ -147,7 +163,12 @@ define(['jquery'], function ($) {
 		    'body': multipartRequestBody
 	    });
 		
-		request.execute(storeApplicationDataCB);
+		request.execute(function(result) {
+			if(result.downloadUrl) {
+				window.localStorage.setItem(SETTINGS_URL, result.downloadUrl);
+			}
+			if(storeApplicationDataCB) storeApplicationDataCB(result);
+		});
  	
     };
   
@@ -157,7 +178,7 @@ define(['jquery'], function ($) {
     	      result = result.concat(resp.items);
     	      var nextPageToken = resp.nextPageToken;
     	      if (nextPageToken) {
-    	        request = gapi.client.drive.files.list({
+    	        request = client.drive.files.list({
     	          'pageToken': nextPageToken
     	        });
     	        retrievePageOfFiles(request, result);
@@ -187,6 +208,44 @@ define(['jquery'], function ($) {
         });
     };
     
+    /**
+     * Opvragen van CRM settings.
+     * 
+     * @return json settings object, of null als er niks werd gevonden
+     */
+    GoogleDriveService.prototype.getSettings = function(getSettingsCB) {
+    	// controleer of settings url in localstorage staat
+    	var settingsUrl = window.localStorage.getItem(SETTINGS_URL);
+    	
+    	if(settingsUrl === null) {
+    		var found = false;
+    		
+    		// probeer settings via een search te vinden
+    		this.listApplicationData(function(result) {
+    			if(result && result[0] !== undefined ) {
+	    			$.each(result, function(index, item) {
+	    				if(item.originalFilename === SETTINGS_NAME) {
+	    					settingsUrl = item.downloadUrl;
+	    					found = true;
+	    				}
+	    			});
+    			}
+    			
+    			if(found) {
+    				window.localStorage.setItem(SETTINGS_URL, settingsUrl);
+    			} else {
+    				window.localStorage.removeItem(SETTINGS_URL);
+    				getSettingsCB(null);
+    				return;
+    			}
+    		});
+    	} 
+    	
+		this.getByUrl(settingsUrl, function(result) {
+			getSettingsCB(result);
+		});
+    	
+    };
     
     return new GoogleDriveService();
 });

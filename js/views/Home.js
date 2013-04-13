@@ -31,16 +31,18 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl
             		});
 	        		
 	        		// Applicatie data opslaan
-	        		googleDriveService.storeApplicationData({fileName: 'crm-settings.json', some: 'jsonthingy'}, function(result) {
-	        			console.log('Callback van store application data');
+	        		googleDriveService.storeApplicationData({fileName: 'crm-settings.json', some: 'jsonthingy'} );
+	        		
+	        		googleDriveService.getSettings(function(result) {
+	        			console.log('storeSettings, result: ');
+	        			result = JSON.parse(result)
 	        			console.log(result);
+	        			
 	        		});
 	        		
 	        		googleDriveService.listApplicationData(function(result) {
-	        			console.log('Callback van list app data');
 	        			console.log(result);
 	        		});
-	        		
             	}, true);
             }
             

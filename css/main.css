@@ -2,8 +2,8 @@ body {
 	padding-top: 60px;
 }
 
-.personen-tabel {
-	padding: 9px 0 !important;
+.personen-tabel .well {
+	padding: 0px;
 }
 
 .bewerken-knop {

@@ -22,14 +22,12 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
             openView(context, 'Home', {});
         });
         
-        this.get('/#!/persoon/:persoonId', function(context) {
-            window.app.personenControl.update(context.params.persoonId);
-            openView(context, 'Home', { persoonId: context.params.persoonId })
-        });
-        
-                // #!/
         this.get('/#!/signin', function(context) {
             openView(context, 'Signin');
+        });
+        
+        this.get('/#!/edit/:persoonId', function(context) {
+            openView(context, 'Edit', { persoonId: context.params.persoonId } );
         });
 
         // before handling each request, set the current hash on the navigation-service
@@ -53,11 +51,11 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
         */
         function openView(context, viewName, args) {
             // if there is a current view, it is the same as requested & it supports refresh: call refresh
-            //if(context.app.view && context.app.view.name === viewName && context.app.view.refresh) {
-            //    context.app.view.refresh(args);
-            //}
-                // (re)open the view if it exists
-            //else {
+            if(context.app.view && context.app.view.name === viewName && context.app.view.refresh) {
+                context.app.view.refresh(args);
+            }
+            // (re)open the view if it exists
+            else {
                 require(['views/' + viewName], function (View) {
                     context.app.view = new View(context.$element(), args);
                     // if the requested view supports init: call init
@@ -67,7 +65,7 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
 
                     $('html, body').scrollTop(0);
                 });
-            //}
+            }
             /* // in all other cases, show an error
             else {
                 context.error();

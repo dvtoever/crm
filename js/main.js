@@ -6,6 +6,7 @@ require.config({
         'driveApi': 			'/js/libs/driveApi',
         'sammy': 				'/js/libs/sammy-latest.min',
         'knockout': 			'/js/libs/knockout-2.1.0',
+        'postbox' :				'/js/libs/knockout-postbox.min',
         'knockout-unobtrusive': '/js/libs/jquery.unobtrusive-knockout',
 
         'stopBinding' : 		'/js/customBinding/stopBinding',

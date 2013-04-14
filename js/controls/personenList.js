@@ -1,55 +1,62 @@
-define([ 'jquery', 'knockout-unobtrusive', 'persoonRepository' ], function($, ko, persoonRepository) {
+define([ 'jquery', 'knockout-unobtrusive', 'persoonRepository', 'postbox' ], 
+function($, ko, persoonRepository, postbox) {
     'use strict';
 
 	function PersonenListViewModel(persoonId) {
 		var self = this;
 
         this.personen = ko.observableArray();
-        this.currentPersoonId = persoonId;
-        
+        this.currentPersoon = ko.observable().syncWith('persoonTopic');
+
+        /** Helper functie om parse personen te verrijken */
         this.addPersoon = function(persoon, active) {
             persoon.getNaam = function() {
                 return persoon.get('voornaam') + ' ' + persoon.get('achternaam');
             };
             
-            persoon.getLink = function() {
-                return "#!/persoon/" + persoon.id;
-            };
-            
             persoon.isActive = ko.observable(active);
-            
             self.personen.push(persoon);
         };
         
-        this.toggleActivePerson = function(currentId, newId) {
-            
+        /** Actief geselecteerde persoon omwisselen */
+        this.toggleActivePerson = function(newPersoon) {
             ko.utils.arrayForEach(self.personen(), function(persoon){
-                
-                if(persoon.id === currentId) {
+                if(persoon.id !== newPersoon.id) {
                     persoon.isActive(false);
                 }
-                
-                if(persoon.id === newId) {
+                if(persoon.id === newPersoon.id) {
                     persoon.isActive(true);
+                    self.currentPersoon(newPersoon);
                 }
             });
         };
         
-        this.update = function(persoonId) {
-            // inladen van personen via callback
-            if(persoonId !== self.currentPersoonId) {
-                self.toggleActivePerson(self.currentPersoonId, persoonId); 
-                self.currentPersoonId = persoonId;
-            }
-            
-            if(self.personen().length === 0 ) {
-                self.personen.removeAll();
-                persoonRepository.findAll(function(result) {
-                    $.each(result, function(index, persoon) {
-                        self.addPersoon(persoon, persoon.id === persoonId);
-                    });
+        /** Toevoegen nieuw persoon aan CRM */
+        this.persoonToevoegen = function() {
+			var nieuwPersoon = persoonRepository.persoonInstance();
+			nieuwPersoon.set('voornaam', 'Nieuw');
+			nieuwPersoon.set('achternaam', 'Persoon');
+			
+			persoonRepository.save(nieuwPersoon);
+			
+			self.addPersoon(nieuwPersoon);
+			self.toggleActivePerson(nieuwPersoon);
+        };
+        
+        /* Initieel inladen van personen uit parse */ 
+        if(self.personen().length === 0 ) {
+            self.personen.removeAll();
+            persoonRepository.findAll(function(result) {
+                $.each(result, function(index, persoon) {
+                    self.addPersoon(persoon, persoon.id === persoonId);
                 });
-            }
+            });
+        }
+        
+
+        /** Bijwerken van view */
+        this.update = function(persoonId) {
+
         };
         
 	}
@@ -61,8 +68,9 @@ define([ 'jquery', 'knockout-unobtrusive', 'persoonRepository' ], function($, ko
 		
 		// initialize the data-binding
         htmlElement.find('.persoon').dataBind( { css: {active: 'isActive'}});
-        htmlElement.find('li a').dataBind( { text: 'getNaam()', attr: { 'href' : 'getLink()' } });
-
+        htmlElement.find('li a').dataBind( { text: 'getNaam()', click: '$parent.toggleActivePerson' });
+        htmlElement.find('.btn').dataBind( { click: 'persoonToevoegen' });
+        
 		// initialize the view-model
 		this.viewModel = new PersonenListViewModel(options.persoonId);
 

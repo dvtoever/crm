@@ -25,7 +25,7 @@ function($, ko, googleDriveService) {
     return function SigninView(htmlElement, args) {
         var self = this;
 
-        this.name = 'Home';
+        this.name = 'Signin';
         this.viewModel = null;
 
         this.init = function() {

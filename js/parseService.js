@@ -3,11 +3,10 @@ define(['jquery', 'parse'], function ($) {
 
     // Parse object wordt op window ingeladen
     var Parse = window.Parse;
-    
-    var user = null;
-    
     var APPLICATION_ID = 'rRFYmrZZ58KS4bZGMeISdpmHHfXMjzF7VLvwAtTj';
     var JAVASCRIPT_KEY = '3YDomdSh9mnk6leheZf8K0j4B6cuqs2tyX07Ndof';
+
+    var user = null;
     
     /**
      * Default constructor
@@ -42,10 +41,11 @@ define(['jquery', 'parse'], function ($) {
      */
     ParseService.prototype.initParse = function(user, pass, initParseCB) {
         console.log('Running parse service init');
+        Parse.initialize(APPLICATION_ID, JAVASCRIPT_KEY);
+        
         var user = 'crm-' + user;
         
         console.log("trying to log in to parse.com : " + user + " - " + pass);
-        Parse.initialize(APPLICATION_ID, JAVASCRIPT_KEY);
         Parse.User.logIn(user, pass, {
         	success: function(userResult) {
         		user = userResult;

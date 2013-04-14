@@ -1,12 +1,12 @@
-define(['jquery', 'parse'], function ($) {
+define(['jquery', 'parse', 'parseService'], function ($) {
     'use strict';
 
     // Parse object wordt op window ingeladen
     var Parse = window.Parse;
     var APPLICATION_ID = 'rRFYmrZZ58KS4bZGMeISdpmHHfXMjzF7VLvwAtTj';
     var JAVASCRIPT_KEY = '3YDomdSh9mnk6leheZf8K0j4B6cuqs2tyX07Ndof';
-    
     Parse.initialize(APPLICATION_ID, JAVASCRIPT_KEY);
+    
     
     /**
      * Default constructor
@@ -16,6 +16,11 @@ define(['jquery', 'parse'], function ($) {
     var repo = new PersoonRepository();
     
     var Persoon = Parse.Object.extend("Persoon");
+    var Document = Parse.Object.extend("Document");
+    var PersoonDocumenten = Parse.Collection.extend({
+    	model: Document
+    });
+    
 
     /**
      * Opvragen van een lege persoon instance
@@ -28,8 +33,12 @@ define(['jquery', 'parse'], function ($) {
         achternaam:     null,
         functie:        null,
         adres:          null,
-        trefwoorden:    null
-        
+        postcode:		null,
+        woonplaats:		null,
+        telefoonnummer:	null,
+        geboortedatum:	null,
+        trefwoorden:    null,
+        documenten:		new PersoonDocumenten()
       });
       
       

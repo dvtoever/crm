@@ -1,5 +1,5 @@
-define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl', 'crmService','stopBinding'],
-    function($, ko, persoonRepository, PersonenControl, crmService) {
+define( ['jquery', 'knockout-unobtrusive', 'PersonenControl', 'crmService', 'postbox', 'stopBinding' ],
+    function($, ko, PersonenControl, crmService, postbox, sb) {
         
         function HomeViewModel(persoonId, updatePersonenCB) {
             var self = this;
@@ -10,10 +10,15 @@ define( ['jquery', 'knockout-unobtrusive', 'persoonRepository', 'PersonenControl
         		console.log(settings);
         	});
             
+        	postbox.subscribe('persoonTopic', function(newValue) {
+        		console.log('Vanuit het Home Model: er is iemand anders geselecteerd: ');
+        		console.log(newValue.getNaam());
+        		console.log(newValue.get('voornaam'));
+        	});
+        	
+        	
             this.refresh = function() {
-	        	if(updatePersonenCB) {
-	        		updatePersonenCB();
-	        	}
+
             }
             
             self.refresh();

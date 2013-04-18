@@ -12,6 +12,7 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
             if(googleDriveService.isReady() && googleDriveService.isAuthorized()) {
             	console.log('Ingelogd en akkoord, ga verder naar volgende pagina');
             	openView(context, 'Home');
+
             } else {
             	console.log('Niet ingelogd, gebruik inlog knop');
                 openView(context, 'Signin');
@@ -32,6 +33,7 @@ define(['jquery', 'sammy', 'googleDriveService'], function ($, sammy, googleDriv
 
         // before handling each request, set the current hash on the navigation-service
         this.before(function(context) {
+
         });
 
         // catch all for unknown routes ('404')

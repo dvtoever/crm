@@ -3,11 +3,13 @@ define( ['jquery', 'knockout-unobtrusive', 'PersonenControl', 'crmService', 'pos
         
         function EditViewModel(persoonId, updatePersonenCB) {
             var self = this;
+
             this.currentPersoon = ko.observable(null);
 
             if(self.currentPersoon() === null) {
                 // load persoon via parse
             }
+
 
         	postbox.subscribe('persoonTopic', function(newValue) {
                 currentPersoon = newValue;
@@ -47,8 +49,10 @@ define( ['jquery', 'knockout-unobtrusive', 'PersonenControl', 'crmService', 'pos
 
                 	htmlElement.find('.personenWrapper').dataBind( { stopBinding : 'true' });
                 	htmlElement.find('.annuleren').dataBind({ click : 'annuleren'} );
+                    //htmlElement.find('input[placeholder="achternaam"]').dataBind( { text : '"achterBIND"'});
 
-                	if(window.app.personenControl === undefined ) {
+
+                    if(window.app.personenControl === undefined ) {
                         window.app.personenControl = new PersonenControl($('.personen-tabel'), {}); // geen personen geselecteerd
                     }
 

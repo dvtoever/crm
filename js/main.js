@@ -14,7 +14,7 @@ require.config({
 
         'googleDriveService':	'/js/googleDriveService',
         'crmService': 			'/js/crmService',
-        'PersonenControl' :		'/js/controls/PersonenList',
+        'PersonenControl' :		'/js/controls/personenList',
         
         'parseService': 		'/js/parseService',
         'persoonRepository': 	'/js/repository/persoonRepository',

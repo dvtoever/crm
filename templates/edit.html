@@ -1,95 +1,58 @@
-<!-- Top navigation bar -->
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="brand" href="#">CRM Application</a>
-            <form class="navbar-form form-inline">
-                <div class="pull-right">
-                    <label class="checkbox">
-                        <input type="checkbox" />Documenten</label>
-                    <label class="checkbox">
-                        <input type="checkbox" />Personen</label>
-                    <input type="text" placeholder="search" />
-                    <button type="button " class="btn">Zoek</button>
-                </div>
-            </form>
+<!-- Inhoud van andere views -->
+<div class="span9">
+
+
+    <!-- Persoon gegevens detail view -->
+    <div class="well">
+        <div class="row">
+            <p class="pull-right">
+                <button class="btn btn-primary opslaan" data-toggle="dropdown">Opslaan</button>
+                <button class="btn annuleren" data-toggle="dropdown">Annuleren</button>
+            </p>
+            <h3 class="persoon-naam muted">Daniel van 't Oever</h3>
         </div>
+        <dl class="dl-horizontal">
+            <dt>Foto</dt>
+            <dd><img class="img-rounded" width="100px"
+                     src="http://voetbalquizmasters.nl/wp-content/uploads/2012/03/Bert.jpg"/></dd>
+            <br/>
+            <dt>Naam</dt>
+            <dd><input type="text" placeholder="voornaam" value="mijn voornaam"><br/>
+                <input type="text" placeholder="achternaam"/></dd>
+            <dt>Functie</dt>
+            <dd><input type="text" placeholder="functie"/></dd>
+            <dt>Adres</dt>
+            <dd><input type="text" placeholder="adres"/>
+                <br/><input type="text" placeholder="postcode"/>
+                <br/><input type="text" placeholder="plaats"/></dd>
+            <dt>Telefoonnummer</dt>
+            <dd><input type="text" placeholder="telefoonnummer"/></dd>
+            <dt>Geboortedatum</dt>
+            <dd><input type="text" placeholder="geboortedatum"/></dd>
+            <dt>Trefwoorden</dt>
+            <dd><input type="text" placeholder="trefwoorden"/></dd>
+            <br/>
+            <dt>Documenten</dt>
+            <dd>
+                <ul class="nav navlist">
+                    <li>
+                        <span>
+                            <a href="#!/document/1">CV - Daniel van 't Oever 22-03-2013.doc</a>
+                            <a href="#!/document/1?delete"><i class="icon-trash pull-right"></i></a>
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            <a href="#!/document/2">Motivatiebrief.doc</a>
+                            <a href="#!/document/2?delete"><i class="icon-trash pull-right"></i></a>
+                        </span>
+                    </li>
+                </ul>
+                <button class="btn">Document toevoegen</button>
+            </dd>
+        </dl>
     </div>
-</div>
-<!-- Content pagina -->
-<div class="container-fluid view">
-    <div class="row-fluid ">
-        <!-- Personen lijst -->
-        <div class="span3 personenWrapper">
-        	<div class="personen-tabel">
-	            <div class="well">
-	                <ul class="nav nav-list">
-	                    <li class="nav-header">Personen</li>
-	                    <!-- ko foreach: personen -->
-	                    <li class="persoon ">
-	                        <a href=""></a>
-	                    </li>
-	                    <!-- /ko -->
-	                </ul>
-	            </div>
-                <button type="submit" class="btn">
-                <i class="icon-user"></i> Persoon toevoegen</button>
-            </div>
-            
-        </div>
-        <!-- Inhoud van andere views -->
-        <div class="span9">
-            
-            
-            <!-- Persoon gegevens detail view -->
-            <div class="well">
-                <div class="row">
-                    <p class="pull-right">
-                        <button class="btn btn-primary opslaan" data-toggle="dropdown">Opslaan</button>
-                        <button class="btn annuleren" data-toggle="dropdown">Annuleren</button>
-                    </p>
-                    <h3 class="persoon-naam muted">Daniel van 't Oever</h3>
-                </div>
-                <dl class="dl-horizontal">
-                    <dt>Foto</dt><dd><img class="img-rounded" width="100px" src="http://voetbalquizmasters.nl/wp-content/uploads/2012/03/Bert.jpg"/></dd>
-                    <br/>
-                    <dt>Naam</dt>
-                    <dd><input type="text" placeholder="voornaam" value="mijn voornaam"><br/>
-                        <input type="text" placeholder="achternaam"/></dd>
-                    <dt>Functie</dt>
-                    <dd><input type="text" placeholder="functie"/></dd>
-                    <dt>Adres</dt>
-                    <dd><input type="text" placeholder="adres"/>
-                        <br/><input type="text" placeholder="postcode"/>
-                        <br/><input type="text" placeholder="plaats"/></dd>
-                    <dt>Telefoonnummer</dt><dd><input type="text" placeholder="telefoonnummer"/></dd>
-                    <dt>Geboortedatum</dt><dd><input type="text" placeholder="geboortedatum"/></dd>
-                    <dt>Trefwoorden</dt>
-                    <dd><input type="text" placeholder="trefwoorden"/></dd>
-                    <br/>
-                    <dt>Documenten</dt>
-                    <dd>
-                        <ul class="nav navlist">
-                            <li>
-                                <span>
-                                    <a href="#!/document/1">CV - Daniel van 't Oever 22-03-2013.doc</a>
-                                    <a href="#!/document/1?delete"><i class="icon-trash pull-right"></i></a>
-                                </span>
-                            </li>
-                            <li>
-                                <span>
-                                    <a href="#!/document/2">Motivatiebrief.doc</a>
-                                    <a href="#!/document/2?delete"><i class="icon-trash pull-right"></i></a>
-                                </span>
-                            </li>
-                        </ul>
-                        <button class="btn">Document toevoegen</button>
-                    </dd>
-                </dl>
-            </div>
-            <!-- End persoon gegevens detail view -->
-            
-        </div>
-    </div>
+    <!-- End persoon gegevens detail view -->
+
 </div>
 

@@ -1,106 +1,63 @@
-<!-- Top navigation bar -->
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="brand" href="#">CRM Application</a>
+<!-- Inhoud van andere views -->
+<div class="span9">
 
-            <form class="navbar-form form-inline">
-                <div class="pull-right">
-                    <label class="checkbox">
-                        <input type="checkbox"/>Documenten</label>
-                    <label class="checkbox">
-                        <input type="checkbox"/>Personen</label>
-                    <input type="text" placeholder="search"/>
-                    <button type="button " class="btn">Zoek</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Content pagina -->
-<div class="container-fluid view">
-    <div class="row-fluid ">
-        <!-- Personen lijst -->
-        <div class="span3 personenWrapper">
-            <div class="personen-tabel">
-                <div class="well">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Personen</li>
-                        <!-- ko foreach: personen -->
-                        <li class="persoon ">
-                            <a href=""></a>
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-                <button type="submit" class="btn">
-                    <i class="icon-user"></i> Persoon toevoegen
+    <!-- Persoon gegevens detail view -->
+    <div class="well persoondetails">
+        <div class="row">
+            <div class="btn-group pull-right bewerken-knop">
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                        href="#">Bewerken
+                    <span class="caret"></span>
                 </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="" class="edit">Gegevens wijzigen</a>
+                    </li>
+                    <li>
+                        <a href="#!/delete/1"><p class="text-error">Verwijderen</p></a>
+                    </li>
+                </ul>
             </div>
-
+            <h3 class="persoon-naam muted">Daniel van 't Oever</h3>
         </div>
-        <!-- Inhoud van andere views -->
-        <div class="span9">
-
-
-            <!-- Persoon gegevens detail view -->
-            <div class="well persoondetails">
-                <div class="row">
-                    <div class="btn-group pull-right bewerken-knop">
-                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                                href="#">Bewerken
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="" class="edit">Gegevens wijzigen</a>
-                            </li>
-                            <li>
-                                <a href="#!/delete/1"><p class="text-error">Verwijderen</p></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <h3 class="persoon-naam muted">Daniel van 't Oever</h3>
-                </div>
-                <dl class="dl-horizontal">
-                    <dt>Foto</dt>
-                    <dd><img class="img-rounded" width="100px"
-                             src="http://voetbalquizmasters.nl/wp-content/uploads/2012/03/Bert.jpg"/></dd>
-                    <br/>
-                    <dt>Functie</dt>
-                    <dd>Software developer</dd>
-                    <dt>Adres</dt>
-                    <dd>Rijksweg 38
-                        <br/>9792 PB
-                        <br/>Ten Post
-                    </dd>
-                    <dt>Telefoonnummer</dt>
-                    <dd>0622433493</dd>
-                    <dt>Geboortedatum</dt>
-                    <dd>12-09-1983</dd>
-                    <dt>Trefwoorden</dt>
-                    <dd>Tref, tref tref etc</dd>
-                    <br/>
-                    <dt>Documenten</dt>
-                    <dd>
-                        <ul class="nav navlist">
-                            <li>
-                                <span>
-                                    <a href="#!/document/1">CV - Daniel van 't Oever 22-03-2013.doc</a>
-                                </span>
-                            </li>
-                            <li>
-                                <span>
-                                    <a href="#!/document/2">Motivatiebrief.doc</a>
-                                </span>
-                            </li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
-            <!-- End persoon gegevens detail view -->
-
-        </div>
+        <dl class="dl-horizontal">
+            <dt>Foto</dt>
+            <dd><img class="img-rounded" width="100px"
+                     src="http://voetbalquizmasters.nl/wp-content/uploads/2012/03/Bert.jpg"/></dd>
+            <br/>
+            <dt>Functie</dt>
+            <dd>Software developer</dd>
+            <dt>Adres</dt>
+            <dd>Rijksweg 38
+                <br/>9792 PB
+                <br/>Ten Post
+            </dd>
+            <dt>Telefoonnummer</dt>
+            <dd>0622433493</dd>
+            <dt>Geboortedatum</dt>
+            <dd>12-09-1983</dd>
+            <dt>Trefwoorden</dt>
+            <dd>Tref, tref tref etc</dd>
+            <br/>
+            <dt>Documenten</dt>
+            <dd>
+                <ul class="nav navlist">
+                    <li>
+                        <span>
+                            <a href="#!/document/1">CV - Daniel van 't Oever 22-03-2013.doc</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            <a href="#!/document/2">Motivatiebrief.doc</a>
+                        </span>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
     </div>
+    <!-- End persoon gegevens detail view -->
+
 </div>
+
 

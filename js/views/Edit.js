@@ -51,11 +51,6 @@ define( ['jquery', 'knockout-unobtrusive', 'PersonenControl', 'crmService', 'pos
                 	htmlElement.find('.annuleren').dataBind({ click : 'annuleren'} );
                     //htmlElement.find('input[placeholder="achternaam"]').dataBind( { text : '"achterBIND"'});
 
-
-                    if(window.app.personenControl === undefined ) {
-                        window.app.personenControl = new PersonenControl($('.personen-tabel'), {}); // geen personen geselecteerd
-                    }
-
                     self.viewModel = new EditViewModel( );
                     ko.applyBindings(self.viewModel, htmlElement[0]);
                 });

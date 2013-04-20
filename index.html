@@ -14,10 +14,54 @@
     </head>
      
     <body>
-        <div class="view">
-            
+        <!-- Top navigation bar -->
+        <div class="navbar navbar-fixed-top" style="display:none">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="#">CRM Application</a>
+
+                    <form class="navbar-form form-inline">
+                        <div class="pull-right">
+                            <label class="checkbox">
+                                <input type="checkbox"/>Documenten</label>
+                            <label class="checkbox">
+                                <input type="checkbox"/>Personen</label>
+                            <input type="text" placeholder="search"/>
+                            <button type="button " class="btn">Zoek</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <div>
+            <!-- Content pagina -->
+            <div class="container-fluid">
+                <div class="row-fluid ">
+                    <!-- Personen lijst -->
+                    <div class="span3 personenWrapper" style="display:none">
+                        <div class="personen-tabel">
+                            <div class="well">
+                                <ul class="nav nav-list">
+                                    <li class="nav-header">Personen</li>
+                                    <!-- ko foreach: personen -->
+                                    <li class="persoon ">
+                                        <a href=""></a>
+                                    </li>
+                                    <!-- /ko -->
+                                </ul>
+                            </div>
+                            <button type="submit" class="btn">
+                                <i class="icon-user"></i> Persoon toevoegen</button>
+                        </div>
+                    </div>
 
+
+                    <!-- Main content pagina -->
+                    <div class="view">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
-
 </html>

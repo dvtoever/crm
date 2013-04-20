@@ -40,9 +40,9 @@ require(['https://apis.google.com/js/client:plus.js?onload=googleLoaded']);
  * 
  * Zorgt dat de home view wordt geopend
  */
-require(['jquery', 'app'],
+require(['jquery', 'app', 'PersonenControl'],
 
-function($, app) {
+function($, app, PersonenControl) {
 
     'use strict';
 

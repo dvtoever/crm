@@ -38,6 +38,9 @@ define( ['jquery', 'knockout-unobtrusive', 'PersonenControl', 'crmService', 'pos
                 $.get( '/templates/home.html', function(template) {
                 	htmlElement.html(template);
 
+                    $('.navbar').css('display', '');
+                    $('.personenWrapper').css('display', '');
+
                 	htmlElement.find('.personenWrapper').dataBind( { stopBinding : 'true' });
                     htmlElement.find('.persoondetails').dataBind( { visible : 'currentPersoon() !== null'});
                     htmlElement.find('.persoon-naam').dataBind( { text : 'currentPersoon() !== null ? currentPersoon().getNaam() : ""' });
